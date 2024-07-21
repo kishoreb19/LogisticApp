@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LogisticApp</string>
+<!--    <string name="map_api_key">AIzaSyAu75AGkxBWV7h39PoiUZFM-SZKq893MIg</string>-->
+        <string name="map_api_key">AIzaSyDmlnxhstdEONvN9Ejr9pmdYbsVLs6idH0</string>
+</resources>
