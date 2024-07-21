@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/order_item_lay"
+        android:background="@drawable/round_border_white"
+        android:padding="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/order_item_date"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/order_item_id"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order Id"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/order_item_not_delivered"
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:background="#ff3d00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Not Delivered"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/order_item_delivered"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:background="#7ab317"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delivered"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
-    tools:context=".AdminActivity">
+    tools:context=".OrderHistory">
     <LinearLayout
         android:padding="5dp"
         android:background="@color/white"
@@ -14,16 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="55dp">
         <ImageView
-            android:id="@+id/logout_admin_act"
-            android:layout_width="40dp"
+            android:id="@+id/back_orderHistory_act"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/baseline_logout_24"/>
+            android:src="@drawable/back_arrow"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:src="@drawable/logistics_logo_transparent"/>
-
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"

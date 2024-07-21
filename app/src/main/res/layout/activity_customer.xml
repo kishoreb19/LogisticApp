@@ -4,49 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".CustomerActivity">
 
     <LinearLayout
-        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
         android:background="@color/white"
         android:elevation="2dp"
-        android:layout_width="match_parent"
-        android:layout_height="55dp">
+        android:padding="5dp">
+
         <ImageView
             android:id="@+id/logout_parcel_act"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/baseline_logout_24"/>
+            android:src="@drawable/baseline_logout_24" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logistics_logo_transparent"/>
+            android:src="@drawable/logistics_logo_transparent" />
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="5dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <com.airbnb.lottie.LottieAnimationView
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="230dp"
-                    app:lottie_rawRes="@raw/truck_customer"
+                    android:layout_weight="1"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
-                    />
+                    app:lottie_rawRes="@raw/truck_customer" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,125 +64,146 @@
                         android:fontFamily="@font/biryani_bold"
                         android:text="Welcome, \n--- ---"
                         android:textColor="@color/gray"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
-                android:layout_marginTop="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
+
                     <LinearLayout
                         android:id="@+id/trackOrder"
-                        android:elevation="1dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
-                        android:orientation="vertical"
-                        android:background="@drawable/round_border_green">
+                        android:layout_weight="1"
+                        android:background="@drawable/round_border_green"
+                        android:elevation="1dp"
+                        android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
+
                                 <TextView
-                                    android:padding="10dp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:padding="10dp"
+                                    android:text="Track Order"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:text="Track Order"/>
+                                    android:textStyle="bold" />
                             </LinearLayout>
+
                             <LinearLayout
-                                android:gravity="center"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="match_parent"
+                                android:gravity="center">
+
                                 <ImageView
-                                    android:layout_gravity="center"
                                     android:layout_width="150dp"
                                     android:layout_height="150dp"
-                                    android:src="@drawable/map_icon"/>
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/map_icon" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/orderHistory"
-                        android:elevation="1dp"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
-                        android:background="@drawable/round_border_yellow">
+                        android:layout_weight="1"
+                        android:background="@drawable/round_border_yellow"
+                        android:elevation="1dp">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
+
                                 <TextView
-                                    android:padding="10dp"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:padding="10dp"
+                                    android:text="Order History"
                                     android:textColor="@color/white"
                                     android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:text="Order History"/>
+                                    android:textStyle="bold" />
                             </LinearLayout>
+
                             <LinearLayout
-                                android:gravity="center"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                                android:layout_height="match_parent"
+                                android:gravity="center">
+
                                 <ImageView
-                                    android:layout_gravity="center"
                                     android:layout_width="100dp"
                                     android:layout_height="100dp"
-                                    android:src="@drawable/box"/>
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/box" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/newParcelPickup"
-                    android:elevation="1dp"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_weight="1"
                     android:layout_margin="10dp"
-                    android:background="@drawable/round_border_dark_green">
+                    android:layout_weight="1"
+                    android:background="@drawable/round_border_dark_green"
+                    android:elevation="1dp"
+                    android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
                             <TextView
-                                android:padding="10dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:text="New Parcel Pickup"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:text="New Parcel Pickup"/>
+                                android:textStyle="bold" />
                         </LinearLayout>
+
                         <LinearLayout
-                            android:gravity="center"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:gravity="center">
+
                             <ImageView
-                                android:layout_gravity="center"
                                 android:layout_width="300dp"
                                 android:layout_height="185dp"
-                                android:src="@drawable/test"/>
+                                android:layout_gravity="center"
+                                android:src="@drawable/test" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

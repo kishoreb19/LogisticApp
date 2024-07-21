@@ -42,7 +42,7 @@ public class CustomerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 v.startAnimation(buttonAnimation);
-                startActivity(new Intent(CustomerActivity.this,TestActivity.class));
+                startActivity(new Intent(CustomerActivity.this,OrderDetailsActivity.class));
             }
         });
 
@@ -50,6 +50,7 @@ public class CustomerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 v.startAnimation(buttonAnimation);
+                startActivity(new Intent(CustomerActivity.this,OrderHistory.class));
             }
         });
 

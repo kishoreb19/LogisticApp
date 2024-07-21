@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -43,8 +44,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +55,7 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
 
     ScrollView parcelScreenContent;
     LinearLayout orderSuccessfulScreen;
+    TextView order_id;
     ImageView back_parcel_act;
     GoogleMap myMap;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -72,6 +76,7 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
 
         parcelScreenContent = (ScrollView) findViewById(R.id.parcelScreenContent);
         orderSuccessfulScreen = (LinearLayout) findViewById(R.id.orderSuccessfulScreen);
+        order_id = (TextView) findViewById(R.id.order_id);
         newParcel_length = (EditText) findViewById(R.id.newParcel_length);
         newParcel_breadth = (EditText) findViewById(R.id.newParcel_breadth);
         newParcel_height = (EditText) findViewById(R.id.newParcel_height);
@@ -201,15 +206,17 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
                 String weightStr = newParcel_weight.getText().toString();
 
 //                Check if all fields are filled
-                if (lengthStr.isEmpty() || breadthStr.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty() ||
-                        sender_lat == 0.00 || sender_lng == 0.00 || receiver_lat == 0.00 || receiver_lng == 0.00 ||
-                        pickupStartHour == 0 || pickupStartMinute == 0 ||
-                        pickupEndHour == 0 || pickupEndMinute == 0 ||
-                        deliveryStartHour == 0 || deliveryStartMinute == 0 ||
-                        deliveryEndHour == 0 || deliveryEndMinute == 0) {
-                    Toast.makeText(NewParcelActivity.this, "Please fill all details!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (lengthStr.isEmpty() || breadthStr.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty() ||
+//                        sender_lat == 0.00 || sender_lng == 0.00 || receiver_lat == 0.00 || receiver_lng == 0.00 ||
+//                        pickupStartHour == 0 || pickupStartMinute == 0 ||
+//                        pickupEndHour == 0 || pickupEndMinute == 0 ||
+//                        deliveryStartHour == 0 || deliveryStartMinute == 0 ||
+//                        deliveryEndHour == 0 || deliveryEndMinute == 0) {
+//                    Toast.makeText(NewParcelActivity.this, "Please fill all details!", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+                LocalDate localDate = LocalDate.now();
+
 
                 //Creating object containing all the details
                 OrderDetails obj = new OrderDetails(
@@ -224,13 +231,33 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
                         pickupStartHour, pickupStartMinute,
                         pickupEndHour, pickupEndMinute,
                         deliveryStartHour, deliveryStartMinute,
-                        deliveryEndHour, deliveryEndMinute);
+                        deliveryEndHour, deliveryEndMinute,localDate.toString(),user_phn,false);
 
-                cr.document(user_phn).set(obj).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                cr.document(user_phn).set(obj).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//                        parcelScreenContent.setVisibility(View.GONE);
+//                        orderSuccessfulScreen.setVisibility(View.VISIBLE);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                finish();
+//                            }
+//                        }, 1400);
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(NewParcelActivity.this, "Error Uploading Details !", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+                cr.add(obj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void unused) {
+                    public void onSuccess(DocumentReference documentReference) {
                         parcelScreenContent.setVisibility(View.GONE);
+                        order_id.setText("#"+documentReference.getId());
                         orderSuccessfulScreen.setVisibility(View.VISIBLE);
+
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {

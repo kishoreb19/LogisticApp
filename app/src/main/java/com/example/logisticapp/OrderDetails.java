@@ -1,30 +1,18 @@
 package com.example.logisticapp;
 
-public class OrderDetails {
+import java.io.Serializable;
+
+public class OrderDetails implements Serializable {
     int length,breadth,height,weight;
     double sender_lat,sender_lng,receiver_lat,receiver_lng;
     int pickupStartHour,pickupStartMinute,pickupEndHour,pickupEndMinute,deliveryStartHour,deliveryStartMinute,deliveryEndHour,deliveryEndMinute;
+    String date,phone;
+    Boolean deliveryStatus;
 
     public OrderDetails() {
-        // Initialize with default values, if necessary
-        this.length = 0;
-        this.breadth = 0;
-        this.height = 0;
-        this.weight = 0;
-        this.sender_lat = 0.0;
-        this.sender_lng = 0.0;
-        this.receiver_lat = 0.0;
-        this.receiver_lng = 0.0;
-        this.pickupStartHour = 0;
-        this.pickupStartMinute = 0;
-        this.pickupEndHour = 0;
-        this.pickupEndMinute = 0;
-        this.deliveryStartHour = 0;
-        this.deliveryStartMinute = 0;
-        this.deliveryEndHour = 0;
-        this.deliveryEndMinute = 0;
+        // Default constructor
     }
-    public OrderDetails(int length, int breadth, int height, int weight, double sender_lat, double sender_lng, double receiver_lat, double receiver_lng, int pickupStartHour, int pickupStartMinute, int pickupEndHour, int pickupEndMinute, int deliveryStartHour, int deliveryStartMinute, int deliveryEndHour, int deliveryEndMinute) {
+    public OrderDetails(int length, int breadth, int height, int weight, double sender_lat, double sender_lng, double receiver_lat, double receiver_lng, int pickupStartHour, int pickupStartMinute, int pickupEndHour, int pickupEndMinute, int deliveryStartHour, int deliveryStartMinute, int deliveryEndHour, int deliveryEndMinute, String date, String phone, Boolean deliveryStatus) {
         this.length = length;
         this.breadth = breadth;
         this.height = height;
@@ -41,6 +29,9 @@ public class OrderDetails {
         this.deliveryStartMinute = deliveryStartMinute;
         this.deliveryEndHour = deliveryEndHour;
         this.deliveryEndMinute = deliveryEndMinute;
+        this.date = date;
+        this.phone = phone;
+        this.deliveryStatus = deliveryStatus;
     }
 
     public int getLength() {
@@ -169,5 +160,29 @@ public class OrderDetails {
 
     public void setDeliveryEndMinute(int deliveryEndMinute) {
         this.deliveryEndMinute = deliveryEndMinute;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Boolean getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(Boolean deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
     }
 }
