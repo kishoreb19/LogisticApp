@@ -44,15 +44,19 @@ public class OrderHistory extends AppCompatActivity {
                 finish();
             }
         });
+
+
         recyclerView = findViewById(R.id.order_history_recyclerView);
-        orderIds = new ArrayList<>();
-        map = new HashMap<>();
+        orderIds = new ArrayList<>(); //List of order ids
+        map = new HashMap<>();// Map -> orderid with orderDetails Object
 
         SharedPreferences sp = getSharedPreferences("login",MODE_PRIVATE);
         String user_phn = sp.getString("phone","no-phn");
 
         CollectionReference cr = FirebaseFirestore.getInstance().collection("Orders");
 
+
+        //Fetching Order details of current user
         cr.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

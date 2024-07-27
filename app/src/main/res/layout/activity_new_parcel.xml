@@ -27,6 +27,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/parcelScreenMapView"
         android:orientation="vertical"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
@@ -37,7 +38,6 @@
             android:text="New Parcel Pickup"
             android:fontFamily="@font/biryani_bold"
             android:textSize="20sp"
-
             android:textColor="@color/gray"/>
         <fragment
             android:layout_width="match_parent"

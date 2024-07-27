@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.EncodedPolyline;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,19 +41,23 @@ public class DriverActivity extends FragmentActivity implements OnMapReadyCallba
 
     private GoogleMap mMap;
     private List<LatLng> locations;
-    TextView driver_welcome_text;
+    TextView driver_name;
     ImageView logout_driver_act;
     ArrayList<Double> latitudes = new ArrayList<>();
     ArrayList<Double> longitudes = new ArrayList<>();
+    Button deliveriesBtn,showRoutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver);
 
-        driver_welcome_text = findViewById(R.id.driver_welcome_text);
+        driver_name = findViewById(R.id.driver_name);
         logout_driver_act = findViewById(R.id.logout_driver_act);
+        deliveriesBtn = (Button) findViewById(R.id.deliveriesBtn);
+        showRoutes = (Button) findViewById(R.id.showRoutes);
 
+        //Logout Button
         logout_driver_act.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,25 +69,46 @@ public class DriverActivity extends FragmentActivity implements OnMapReadyCallba
             }
         });
 
+        //Opens list of pickups and delivers
+        deliveriesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DriverActivity.this,DeliveriesActivity.class));
+            }
+        });
+
+        //Shows shortest routes between the pickups and deliveries locations
+        showRoutes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawRoute();
+            }
+        });
+
         SharedPreferences sp = getSharedPreferences("login", MODE_PRIVATE);
         String name = sp.getString("firstName", "FirstName") + " " + sp.getString("lastName", "LastName");
-        driver_welcome_text.setText("Welcome, " + name);
+        driver_name.setText("Driver : " + name);
 
         locations = new ArrayList<>();
 
-        //Fetching locations(lat,lng) from firebase
+        //Fetching locations(lat,lng) from firebase that have not been yet delivered
         CollectionReference cr = FirebaseFirestore.getInstance().collection("Orders");
         cr.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     OrderDetails obj = documentSnapshot.toObject(OrderDetails.class);
-                    latitudes.add(obj.getSender_lat());
-                    latitudes.add(obj.getReceiver_lat());
-                    longitudes.add(obj.getSender_lng());
-                    longitudes.add(obj.getReceiver_lng());
+                    if(!obj.getDeliveryStatus()){
+                        //Add only those locations that have not been yet delivered
+                        //latitudes contain data in this format -> [sender_lat1,receiver_lat1]
+                        //longitudes contain data in this format -> [sender_lng1,receiver_lng1]
+                        latitudes.add(obj.getSender_lat());
+                        latitudes.add(obj.getReceiver_lat());
+                        longitudes.add(obj.getSender_lng());
+                        longitudes.add(obj.getReceiver_lng());
+                    }
                 }
-                // Now add LatLng objects to locations list and log the data
+                // Now add LatLng objects to locations list
                 for (int i = 0; i < latitudes.size(); i++) {
                     locations.add(new LatLng(latitudes.get(i), longitudes.get(i)));
                 }
@@ -107,27 +134,29 @@ public class DriverActivity extends FragmentActivity implements OnMapReadyCallba
 
 
         int i = 1;
-        boolean snap = false;
-        String t="";
+        boolean snap = false; //used for switching between "Pickup" and "Deliver" title
+        String title="";
         for (LatLng location : locations) {
 
+            //First Pickup then Deliver
             if(!snap){
-                t="Pickup";
+                title="Pickup";
             }else{
-                t="Deliver";
+                title="Deliver";
             }
 
             snap = !snap;
-            mMap.addMarker(new MarkerOptions().position(location).title(t+" "+i));
-            if(t.equals("Deliver")) i++;
+            mMap.addMarker(new MarkerOptions().position(location).title(title+" "+i));
+            if(title.equals("Deliver")) i++;
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(locations.get(0)));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
         }
 
-        drawRoute();
+        //drawRoute();
     }
 
+    //Draws shortes route between pickups and deliveriers locations
     private void drawRoute() {
         if (locations.size() > 1) {
             GeoApiContext context = new GeoApiContext.Builder()

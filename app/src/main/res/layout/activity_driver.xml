@@ -37,10 +37,40 @@
             android:textColor="@color/gray"
             android:textSize="16sp"/>
     </LinearLayout>
+    <TextView
+        android:id="@+id/driver_name"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Driver"
+        android:gravity="center"
+        android:textStyle="bold"/>
     <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
         android:id="@+id/driver_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_marginBottom="10dp"/>
+    <LinearLayout
+        android:gravity="center"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0">
+        <Button
+            android:layout_margin="10dp"
+            android:id="@+id/showRoutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Routes"/>
+        <Button
+            android:layout_margin="10dp"
+            android:id="@+id/deliveriesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deliveries"/>
+    </LinearLayout>
+
+
 </LinearLayout>

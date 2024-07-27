@@ -8,11 +8,13 @@ public class OrderDetails implements Serializable {
     int pickupStartHour,pickupStartMinute,pickupEndHour,pickupEndMinute,deliveryStartHour,deliveryStartMinute,deliveryEndHour,deliveryEndMinute;
     String date,phone;
     Boolean deliveryStatus;
+    String user_name;
 
     public OrderDetails() {
         // Default constructor
     }
-    public OrderDetails(int length, int breadth, int height, int weight, double sender_lat, double sender_lng, double receiver_lat, double receiver_lng, int pickupStartHour, int pickupStartMinute, int pickupEndHour, int pickupEndMinute, int deliveryStartHour, int deliveryStartMinute, int deliveryEndHour, int deliveryEndMinute, String date, String phone, Boolean deliveryStatus) {
+
+    public OrderDetails(int length, int breadth, int height, int weight, double sender_lat, double sender_lng, double receiver_lat, double receiver_lng, int pickupStartHour, int pickupStartMinute, int pickupEndHour, int pickupEndMinute, int deliveryStartHour, int deliveryStartMinute, int deliveryEndHour, int deliveryEndMinute, String date, String phone, Boolean deliveryStatus, String user_name) {
         this.length = length;
         this.breadth = breadth;
         this.height = height;
@@ -32,6 +34,7 @@ public class OrderDetails implements Serializable {
         this.date = date;
         this.phone = phone;
         this.deliveryStatus = deliveryStatus;
+        this.user_name = user_name;
     }
 
     public int getLength() {
@@ -184,5 +187,13 @@ public class OrderDetails implements Serializable {
 
     public void setDeliveryStatus(Boolean deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 }

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".OrderHistory">
+    tools:context=".DeliveriesActivity">
+
     <LinearLayout
         android:padding="5dp"
         android:background="@color/white"
@@ -14,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp">
         <ImageView
-            android:id="@+id/back_orderHistory_act"
+            android:id="@+id/back_deliveries_act"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
@@ -26,38 +27,12 @@
             android:src="@drawable/logistics_logo_transparent"/>
     </LinearLayout>
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Date"
-                android:textStyle="bold"
-                android:gravity="center"/>
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Order Id"
-                android:textStyle="bold"
-                android:gravity="center"/>
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delivery Status"
-                android:textStyle="bold"
-                android:gravity="center"/>
-        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/order_history_recyclerView"
+            android:id="@+id/deliveriesRV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>

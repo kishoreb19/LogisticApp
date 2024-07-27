@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         successfulScreen = (LinearLayout) findViewById(R.id.loginSuccessfulScreen);
         registerActivityBtn = (TextView) findViewById(R.id.registerActivityBtn);
 
+        //Firebase Initialisation
         FirebaseAuth fa = FirebaseAuth.getInstance();
         CollectionReference ff = FirebaseFirestore.getInstance().collection("Users");
 
@@ -58,24 +59,13 @@ public class LoginActivity extends AppCompatActivity {
         String []arr = {"Customer","Driver","Administrator"};
         ArrayAdapter<String> userTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,arr);
         login_userType.setAdapter(userTypeAdapter);
+//        login_userType.getSelectedItem().toString();
 
+        //Button Animation
         Animation buttonAnimation = AnimationUtils.loadAnimation(this,R.anim.button_anim);
 
-//        userLoginBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                v.startAnimation(buttonAnimation);
-//                loginScreenContent.setVisibility(View.GONE);
-//                successfulScreen.setVisibility(View.VISIBLE);
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        startActivity(new Intent(LoginActivity.this,CustomerActivity.class));
-//                        finish();
-//                    }
-//                },1400);
-//            }
-//        });
+
+        //Collecting User type
         login_userType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -87,10 +77,13 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+        //Login Button Function
         userLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.startAnimation(buttonAnimation);
+
+                //Fetching and checking credentials from FireBase Firestore Database
                 ff.document(userPhn.getText().toString()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -98,11 +91,15 @@ public class LoginActivity extends AppCompatActivity {
                         String pwd = value.get("pwd").toString();
 
                         if(usert.equals(userType) && pwd.equals(userPwd.getText().toString())){
+                            //Load login screen animation
                             loginScreenContent.setVisibility(View.GONE);
                             successfulScreen.setVisibility(View.VISIBLE);
+
+                            //Opens activity after a delay 1400 milli seconds based on user type
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+
                                     SharedPreferences sp = getSharedPreferences("login",MODE_PRIVATE);
                                     SharedPreferences.Editor edit = sp.edit();
                                     edit.putBoolean("flag",true);
@@ -111,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
                                     edit.putString("lastName",value.get("lastname").toString());
                                     edit.putString("phone", userPhn.getText().toString());
                                     edit.apply();
+
+
                                     if(userType=="Customer"){
                                         startActivity(new Intent(LoginActivity.this,CustomerActivity.class));
                                         finish();
@@ -134,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Opens Register Activity on button click
         registerActivityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

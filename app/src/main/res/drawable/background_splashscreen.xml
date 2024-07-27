@@ -3,6 +3,6 @@
     <item android:drawable="@color/white"/>
     <item>
         <bitmap android:src="@drawable/logistics_logo_transparent"
-            android:gravity="center"/>
+            android:gravity="center" />
     </item>
 </layer-list>

@@ -56,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerScreenContent = (ScrollView) findViewById(R.id.registerScreenContent);
         registerSuccessfulScreen = (LinearLayout) findViewById(R.id.registerSuccessfulScreen);
 
+        //Firebase Initialisation
         FirebaseAuth fa = FirebaseAuth.getInstance();
         CollectionReference ff = FirebaseFirestore.getInstance().collection("Users");
 
@@ -72,27 +73,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-//        registerBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                v.startAnimation(buttonAnimation);
-//                registerScreenContent.setVisibility(View.GONE);
-//                registerSuccessfulScreen.setVisibility(View.VISIBLE);
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
-//                        finish();
-//                    }
-//                },1400);
-//            }
-//        });
-//        register_userType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(RegisterActivity.this, arr[position], Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         register_userType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -112,12 +92,14 @@ public class RegisterActivity extends AppCompatActivity {
                 v.startAnimation(buttonAnimation);
                 DocumentReference dr = ff.document(register_userPhn.getText().toString());
 
+                //Creating map object consisting of usertype,firstname,lastname and password
                 Map<String,String> map = new HashMap<>();
                 map.put("userType",userType);
                 map.put("firstname",register_user_firstname.getText().toString());
                 map.put("lastname",register_user_lastname.getText().toString());
                 map.put("pwd",register_userPwd.getText().toString());
 
+                //Adding map data to firebase
                 dr.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -140,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        //Login Activity button
         loginActivityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

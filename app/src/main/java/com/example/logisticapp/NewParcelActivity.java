@@ -54,7 +54,7 @@ import java.util.Map;
 public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ScrollView parcelScreenContent;
-    LinearLayout orderSuccessfulScreen;
+    LinearLayout parcelScreenMapView,orderSuccessfulScreen;
     TextView order_id;
     ImageView back_parcel_act;
     GoogleMap myMap;
@@ -75,6 +75,7 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
 
 
         parcelScreenContent = (ScrollView) findViewById(R.id.parcelScreenContent);
+        parcelScreenMapView = (LinearLayout) findViewById(R.id.parcelScreenMapView);
         orderSuccessfulScreen = (LinearLayout) findViewById(R.id.orderSuccessfulScreen);
         order_id = (TextView) findViewById(R.id.order_id);
         newParcel_length = (EditText) findViewById(R.id.newParcel_length);
@@ -108,7 +109,7 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
         mapFragment.getMapAsync(NewParcelActivity.this);
 
 
-
+        //Sender's current location fetching and marking
         getSenderLocation();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -191,9 +192,11 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
+        //Shared Preferences
         SharedPreferences sp = getSharedPreferences("login",MODE_PRIVATE);
 
         String user_phn = sp.getString("phone","no-phn");
+        String user_name = sp.getString("firstName","no-fn") +" " +  sp.getString("lastName","no-fn");
 
         newParcel_Book.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,10 +218,12 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
 //                    Toast.makeText(NewParcelActivity.this, "Please fill all details!", Toast.LENGTH_SHORT).show();
 //                    return;
 //                }
+
+                //Fetching Current Date
                 LocalDate localDate = LocalDate.now();
 
 
-                //Creating object containing all the details
+                //Creating object containing all the details of parcels and user.
                 OrderDetails obj = new OrderDetails(
                         Integer.parseInt(lengthStr),
                         Integer.parseInt(breadthStr),
@@ -231,32 +236,18 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
                         pickupStartHour, pickupStartMinute,
                         pickupEndHour, pickupEndMinute,
                         deliveryStartHour, deliveryStartMinute,
-                        deliveryEndHour, deliveryEndMinute,localDate.toString(),user_phn,false);
+                        deliveryEndHour, deliveryEndMinute,localDate.toString(),user_phn,false,user_name);
 
-//                cr.document(user_phn).set(obj).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void unused) {
-//                        parcelScreenContent.setVisibility(View.GONE);
-//                        orderSuccessfulScreen.setVisibility(View.VISIBLE);
-//                        new Handler().postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                finish();
-//                            }
-//                        }, 1400);
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(NewParcelActivity.this, "Error Uploading Details !", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+
+                //Adding object to firebase
                 cr.add(obj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         parcelScreenContent.setVisibility(View.GONE);
-                        order_id.setText("#"+documentReference.getId());
+                        parcelScreenMapView.setVisibility(View.GONE);
                         orderSuccessfulScreen.setVisibility(View.VISIBLE);
+
+                        order_id.setText("#"+documentReference.getId());
 
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -275,25 +266,25 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
+    //Initialising Google Map (myMap)
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         myMap = googleMap;
 
+        //Default Sender location
         LatLng sender = new LatLng(22.3210777,87.3079438);
-//        myMap.addMarker(new MarkerOptions().position(sender).title("Sender"));
-//        myMap.moveCamera(CameraUpdateFactory.newLatLng(sender));
-//        myMap.animateCamera(CameraUpdateFactory.zoomTo(12));
 
         myMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
+                //Clears all existing markers
                 myMap.clear();
 
-                //Sender
+                //Sender's location
                 LatLng sender = new LatLng(sender_lat,sender_lng);
                 myMap.addMarker(new MarkerOptions().position(sender).icon(setIcon(NewParcelActivity.this,R.drawable.sender_pin)).title("Sender"));
 
-                //Receiver
+                //Receiver's location
                 receiver_lat = latLng.latitude;
                 receiver_lng = latLng.longitude;
                 Toast.makeText(NewParcelActivity.this,Double.toString(receiver_lat)+","+Double.toString(receiver_lng), Toast.LENGTH_SHORT).show();
@@ -304,10 +295,15 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
 
     }
     void getSenderLocation() {
+
+        //Checks if the location permissions are granted or not. If not granted, requests permissions.
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},0);
             return;
         }
+
+
+        //Location Fetched
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -316,6 +312,7 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
                     sender_lat = location.getLatitude();
                     sender_lng = location.getLongitude();
 
+                    //Marking Sender's location on map
                     LatLng sender = new LatLng(sender_lat,sender_lng);
                     myMap.addMarker(new MarkerOptions().position(sender).icon(setIcon(NewParcelActivity.this,R.drawable.sender_pin)).title("Sender"));
                     myMap.moveCamera(CameraUpdateFactory.newLatLng(sender));
@@ -328,7 +325,7 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(NewParcelActivity.this,e.toString(),Toast.LENGTH_SHORT);
+                Toast.makeText(NewParcelActivity.this,"Error "+e,Toast.LENGTH_SHORT);
             }
         }).addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
@@ -338,6 +335,7 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
+    //Creates and returns Map Icon (Marker Icon)
     BitmapDescriptor setIcon(Context context, int drawable){
         Drawable vectorDrawable = ContextCompat.getDrawable(
                 context, drawable);

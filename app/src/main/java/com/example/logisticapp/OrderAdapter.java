@@ -47,6 +47,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 holder.order_item_not_delivered.setVisibility(View.VISIBLE);
             }
             holder.order_item_lay.setOnClickListener(view -> {
+                //Passing Order Details object to OrderDetailsActivity to show user's order (parcel) details
                 Intent intent = new Intent(context, OrderDetailsActivity.class);
                 intent.putExtra("OrderDetailsObj", orderDetails);
                 intent.putExtra("order_id",orderId);

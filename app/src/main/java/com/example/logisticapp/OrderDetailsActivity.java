@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class OrderDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     ImageView back_orderdetails_act;
-    TextView order_details_id, length, breadth, height, weight, pickupStart, pickupEnd, deliveryStart, deliveryEnd;
+    TextView order_details_id,order_details_user_name,order_details_user_phn, length, breadth, height, weight, pickupStart, pickupEnd, deliveryStart, deliveryEnd;
     LinearLayout delivery_status_delivered, delivery_status_to_be_delivered;
     GoogleMap myMap;
     double sender_lat, sender_lng, receiver_lat, receiver_lng;
@@ -33,6 +33,8 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnMapRead
         setContentView(R.layout.activity_order_details);
 
         order_details_id = findViewById(R.id.order_details_id);
+        order_details_user_name = findViewById(R.id.order_details_user_name);
+        order_details_user_phn = findViewById(R.id.order_details_user_phn);
         back_orderdetails_act = findViewById(R.id.back_orderdetails_act);
         length = findViewById(R.id.length);
         breadth = findViewById(R.id.breadth);
@@ -56,6 +58,8 @@ public class OrderDetailsActivity extends AppCompatActivity implements OnMapRead
         }
 
         order_details_id.setText("#" + intent.getStringExtra("order_id"));
+        order_details_user_name.setText(obj.getUser_name());
+        order_details_user_phn.setText("+91-"+obj.getPhone());
         length.setText(Integer.toString(obj.getLength()));
         breadth.setText(Integer.toString(obj.getBreadth()));
         height.setText(Integer.toString(obj.getHeight()));

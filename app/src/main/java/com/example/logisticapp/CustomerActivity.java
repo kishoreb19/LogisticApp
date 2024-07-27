@@ -25,7 +25,7 @@ public class CustomerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer);
 
-        trackOrder = (LinearLayout) findViewById(R.id.trackOrder);
+//        trackOrder = (LinearLayout) findViewById(R.id.trackOrder);
         orderHistory = (LinearLayout) findViewById(R.id.orderHistory);
         newParcelPickup = (LinearLayout) findViewById(R.id.newParcelPickup);
         logout_parcel_act = (ImageView) findViewById(R.id.logout_parcel_act);
@@ -38,14 +38,15 @@ public class CustomerActivity extends AppCompatActivity {
         String lastName = sp.getString("lastName","--");
         customer_name_show.setText("Welcome \n"+firstName+" "+lastName);
 
-        trackOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonAnimation);
-                startActivity(new Intent(CustomerActivity.this,OrderDetailsActivity.class));
-            }
-        });
+//        trackOrder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                v.startAnimation(buttonAnimation);
+//                startActivity(new Intent(CustomerActivity.this,OrderDetailsActivity.class));
+//            }
+//        });
 
+        //Opens Order History & Tracking Activity
         orderHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +55,7 @@ public class CustomerActivity extends AppCompatActivity {
             }
         });
 
+        //Opens New Parcel Pickup Activity
         newParcelPickup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +64,7 @@ public class CustomerActivity extends AppCompatActivity {
             }
         });
 
+        //Logout Button Function
         logout_parcel_act.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
