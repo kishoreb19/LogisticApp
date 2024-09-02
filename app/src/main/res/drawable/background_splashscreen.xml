@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/white"/>
+    <!-- Background color -->
+    <item android:drawable="@color/white" />
+
+    <!-- Centered image with proper scaling -->
     <item>
-        <bitmap android:src="@drawable/logistics_logo_transparent"
-            android:gravity="center" />
+        <bitmap
+            android:src="@drawable/logistics_logo_transparent"
+            android:gravity="center"
+            android:tileMode="disabled"
+            android:scaleType="centerInside" />
     </item>
 </layer-list>

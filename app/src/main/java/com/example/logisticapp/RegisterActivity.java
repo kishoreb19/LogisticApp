@@ -34,45 +34,41 @@ public class RegisterActivity extends AppCompatActivity {
 
     ImageView register_back;
     Spinner register_userType;
-    EditText register_user_firstname,register_user_lastname, register_userPhn,register_userPwd;
+    EditText register_user_firstname, register_user_lastname, register_userPhn, register_userPwd;
     Button registerBtn;
     TextView loginActivityBtn;
     ScrollView registerScreenContent;
     LinearLayout registerSuccessfulScreen;
     String userType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        register_back = (ImageView) findViewById(R.id.register_back);
-        register_userType = (Spinner) findViewById(R.id.register_userType);
-        register_user_firstname = (EditText) findViewById(R.id.register_user_firstname);
-        register_user_lastname = (EditText) findViewById(R.id.register_user_lastname);
-        register_userPhn = (EditText) findViewById(R.id.register_userPhn);
-        register_userPwd = (EditText) findViewById(R.id.register_userPwd);
-        registerBtn = (Button) findViewById(R.id.registerBtn);
-        loginActivityBtn = (TextView) findViewById(R.id.loginActivityBtn);
-        registerScreenContent = (ScrollView) findViewById(R.id.registerScreenContent);
-        registerSuccessfulScreen = (LinearLayout) findViewById(R.id.registerSuccessfulScreen);
+        register_back = findViewById(R.id.register_back);
+        register_userType = findViewById(R.id.register_userType);
+        register_user_firstname = findViewById(R.id.register_user_firstname);
+        register_user_lastname = findViewById(R.id.register_user_lastname);
+        register_userPhn = findViewById(R.id.register_userPhn);
+        register_userPwd = findViewById(R.id.register_userPwd);
+        registerBtn = findViewById(R.id.registerBtn);
+        loginActivityBtn = findViewById(R.id.loginActivityBtn);
+        registerScreenContent = findViewById(R.id.registerScreenContent);
+        registerSuccessfulScreen = findViewById(R.id.registerSuccessfulScreen);
 
-        //Firebase Initialisation
+        // Firebase Initialization
         FirebaseAuth fa = FirebaseAuth.getInstance();
         CollectionReference ff = FirebaseFirestore.getInstance().collection("Users");
 
-        String []arr = {"Customer","Driver","Administrator"};
-        ArrayAdapter<String> userTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,arr);
+        String[] arr = {"Customer", "Driver", "Administrator"};
+        ArrayAdapter<String> userTypeAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, arr);
+        userTypeAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
         register_userType.setAdapter(userTypeAdapter);
 
-        Animation buttonAnimation = AnimationUtils.loadAnimation(this,R.anim.button_anim);
+        Animation buttonAnimation = AnimationUtils.loadAnimation(this, R.anim.button_anim);
 
-        register_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
+        register_back.setOnClickListener(v -> finish());
 
         register_userType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -82,53 +78,60 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonAnimation);
+        registerBtn.setOnClickListener(v -> {
+            v.startAnimation(buttonAnimation);
+
+            // Validation
+            if (isValidInput()) {
                 DocumentReference dr = ff.document(register_userPhn.getText().toString());
 
-                //Creating map object consisting of usertype,firstname,lastname and password
-                Map<String,String> map = new HashMap<>();
-                map.put("userType",userType);
-                map.put("firstname",register_user_firstname.getText().toString());
-                map.put("lastname",register_user_lastname.getText().toString());
-                map.put("pwd",register_userPwd.getText().toString());
+                // Creating map object consisting of usertype, firstname, lastname, and password
+                Map<String, String> map = new HashMap<>();
+                map.put("userType", userType);
+                map.put("firstname", register_user_firstname.getText().toString());
+                map.put("lastname", register_user_lastname.getText().toString());
+                map.put("pwd", register_userPwd.getText().toString());
 
-                //Adding map data to firebase
-                dr.set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        registerScreenContent.setVisibility(View.GONE);
-                        registerSuccessfulScreen.setVisibility(View.VISIBLE);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
-                                finish();
-                            }
-                        },1400);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(RegisterActivity.this, "Unable to register!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                // Adding map data to Firebase
+                dr.set(map).addOnSuccessListener(unused -> {
+                    registerScreenContent.setVisibility(View.GONE);
+                    registerSuccessfulScreen.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(() -> {
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                        finish();
+                    }, 1400);
+                }).addOnFailureListener(e -> Toast.makeText(RegisterActivity.this, "Unable to register!", Toast.LENGTH_SHORT).show());
             }
         });
 
-        //Login Activity button
-        loginActivityBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
-            }
-        });
+        // Login Activity button
+        loginActivityBtn.setOnClickListener(v -> startActivity(new Intent(RegisterActivity.this, LoginActivity.class)));
+    }
 
+    private boolean isValidInput() {
+        if (register_user_firstname.getText().toString().trim().isEmpty()) {
+            register_user_firstname.setError("First name is required");
+            return false;
+        }
+        if (register_user_lastname.getText().toString().trim().isEmpty()) {
+            register_user_lastname.setError("Last name is required");
+            return false;
+        }
+        if (register_userPhn.getText().toString().trim().isEmpty()) {
+            register_userPhn.setError("Phone number is required");
+            return false;
+        }
+        if (register_userPwd.getText().toString().trim().isEmpty()) {
+            register_userPwd.setError("Password is required");
+            return false;
+        }
+        if (userType == null || userType.isEmpty()) {
+            Toast.makeText(this, "User type is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }

@@ -27,6 +27,8 @@ import java.util.ArrayList;
 public class DeliveriesActivity extends AppCompatActivity {
 
     ArrayList<String> data;
+    ArrayList<Double> latitudes = new ArrayList<>();
+    ArrayList<Double> longitudes = new ArrayList<>();
     RecyclerView deliveriesRV;
     ImageView back_deliveries_act;
     @Override
@@ -58,6 +60,10 @@ public class DeliveriesActivity extends AppCompatActivity {
                     OrderDetails obj = documentSnapshot.toObject(OrderDetails.class);
                     if(!obj.getDeliveryStatus()){
                         data.add(documentSnapshot.getId());
+                        latitudes.add(obj.getSender_lat());
+                        latitudes.add(obj.getReceiver_lat());
+                        longitudes.add(obj.getSender_lng());
+                        longitudes.add(obj.getReceiver_lng());
                     }
                 }
                 Log.d("test",data.toString());

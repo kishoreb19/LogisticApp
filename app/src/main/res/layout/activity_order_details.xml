@@ -29,7 +29,10 @@
         android:orientation="vertical"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Order ID TextView -->
         <TextView
             android:id="@+id/order_details_id"
             android:padding="10dp"
@@ -39,271 +42,278 @@
             android:textSize="20sp"
             android:textStyle="bold"/>
 
+        <!-- Map Fragment -->
         <fragment
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            />
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
     </LinearLayout>
-    <ScrollView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:padding="15dp"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
             <LinearLayout
                 android:padding="15dp"
-                android:background="@drawable/round_border_white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_margin="10dp"
-                    android:id="@+id/order_details_user_name"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="User Name"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:layout_margin="10dp"
-                    android:id="@+id/order_details_user_phn"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+91-1234567890"
-                    android:gravity="right"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-            <LinearLayout
-                android:padding="15dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/round_border_white"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_margin="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:text="Dimensions &amp; Weight"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Length\n(m)"/>
-                        <TextView
-                            android:id="@+id/length"
-                            android:gravity="center"
-                            android:layout_margin="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Breadth\n(m)"/>
-                        <TextView
-                            android:id="@+id/breadth"
-                            android:gravity="center"
-                            android:layout_margin="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Height\n(m)"/>
-                        <TextView
-                            android:id="@+id/height"
-                            android:gravity="center"
-                            android:layout_margin="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Weight\n(kg)"/>
-                        <TextView
-                            android:id="@+id/weight"
-                            android:gravity="center"
-                            android:layout_margin="5dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:padding="15dp"
-                android:background="@drawable/round_border_white"
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <TextView
-                    android:layout_margin="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Timings"
-                    android:textStyle="bold"/>
                 <LinearLayout
+                    android:padding="15dp"
+                    android:background="@drawable/round_border_white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <LinearLayout
-                        android:gravity="center"
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:id="@+id/order_details_user_name"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:gravity="center"
-                            android:layout_margin="5dp"
-                            android:text="Pickup"/>
-                        <TextView
-                            android:id="@+id/pickupStart"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="6:00"/>
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="20dp"
-                            android:background="@color/black"/>
-                        <TextView
-                            android:id="@+id/pickupEnd"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="6:30"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:text="User Name"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:id="@+id/order_details_user_phn"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:text="+91-1234567890"
+                        android:gravity="right"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:padding="15dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/round_border_white"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_margin="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Dimensions &amp; Weight"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_weight="1"
                             android:gravity="center"
-                            android:layout_margin="5dp"
-                            android:text="Delivery"/>
-                        <TextView
-                            android:id="@+id/deliveryStart"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:text="Length\n(m)"/>
+                            <TextView
+                                android:id="@+id/length"
+                                android:gravity="center"
+                                android:layout_margin="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout
                             android:gravity="center"
-                            android:text="6:00"/>
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="20dp"
-                            android:background="@color/black"/>
-                        <TextView
-                            android:id="@+id/deliveryEnd"
-                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:text="Breadth\n(m)"/>
+                            <TextView
+                                android:id="@+id/breadth"
+                                android:gravity="center"
+                                android:layout_margin="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout
                             android:gravity="center"
-                            android:text="6:30"/>
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:text="Height\n(m)"/>
+                            <TextView
+                                android:id="@+id/height"
+                                android:gravity="center"
+                                android:layout_margin="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:text="Weight\n(kg)"/>
+                            <TextView
+                                android:id="@+id/weight"
+                                android:gravity="center"
+                                android:layout_margin="5dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"/>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:padding="15dp"
-                android:background="@drawable/round_border_white"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_margin="10dp"
+                <LinearLayout
+                    android:padding="15dp"
+                    android:background="@drawable/round_border_white"
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Delivery Status"
-                    android:textStyle="bold"/>
-                <LinearLayout
-                    android:visibility="gone"
-                    android:id="@+id/delivery_status_delivered"
-                    android:background="#7ab317"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:orientation="vertical">
                     <TextView
+                        android:layout_margin="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Delivered"
-                        android:textColor="@color/white"
-                        android:layout_margin="5dp"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:gravity="center"/>
+                        android:text="Timings"
+                        android:textStyle="bold"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:layout_margin="5dp"
+                                android:text="Pickup"/>
+                            <TextView
+                                android:id="@+id/pickupStart"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="6:00"/>
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="20dp"
+                                android:background="@color/black"/>
+                            <TextView
+                                android:id="@+id/pickupEnd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="6:30"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                android:layout_margin="5dp"
+                                android:text="Delivery"/>
+                            <TextView
+                                android:id="@+id/deliveryStart"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="6:00"/>
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="20dp"
+                                android:background="@color/black"/>
+                            <TextView
+                                android:id="@+id/deliveryEnd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="6:30"/>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/delivery_status_to_be_delivered"
-                    android:visibility="gone"
-                    android:background="#ff3d00"
+                    android:padding="15dp"
+                    android:background="@drawable/round_border_white"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:layout_margin="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="To Be Delivered"
-                        android:textColor="@color/white"
-                        android:layout_margin="5dp"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:gravity="center"/>
+                        android:text="Delivery Status"
+                        android:textStyle="bold"/>
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/delivery_status_delivered"
+                        android:background="#7ab317"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Delivered"
+                            android:textColor="@color/white"
+                            android:layout_margin="5dp"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:gravity="center"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/delivery_status_to_be_delivered"
+                        android:visibility="gone"
+                        android:background="#ff3d00"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="To Be Delivered"
+                            android:textColor="@color/white"
+                            android:layout_margin="5dp"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:gravity="center"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 </LinearLayout>

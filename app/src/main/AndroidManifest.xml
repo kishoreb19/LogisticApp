@@ -37,7 +37,9 @@
             android:exported="false" />
         <activity
             android:name=".NewParcelActivity"
-            android:exported="false" />
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />

@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -48,23 +47,21 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ScrollView parcelScreenContent;
-    LinearLayout parcelScreenMapView,orderSuccessfulScreen;
+    LinearLayout parcelScreenContent;
+    LinearLayout parcelScreenMapView, orderSuccessfulScreen;
     TextView order_id;
     ImageView back_parcel_act;
     GoogleMap myMap;
     FusedLocationProviderClient fusedLocationProviderClient;
-    Button getCurrentLocationBtn,pickupStartTime,pickupEndTime,deliveryStartTime,deliveryEndTime;
-    Double sender_lat,sender_lng,receiver_lat,receiver_lng;
-    EditText newParcel_length,newParcel_breadth,newParcel_height,newParcel_weight;
+    Button getCurrentLocationBtn, pickupStartTime, pickupEndTime, deliveryStartTime, deliveryEndTime;
+    Double sender_lat, sender_lng, receiver_lat, receiver_lng;
+    EditText newParcel_length, newParcel_breadth, newParcel_height, newParcel_weight;
     Button newParcel_Book;
 
-    int pickupStartHour,pickupStartMinute,pickupEndHour,pickupEndMinute,deliveryStartHour,deliveryStartMinute,deliveryEndHour,deliveryEndMinute;
+    int pickupStartHour, pickupStartMinute, pickupEndHour, pickupEndMinute, deliveryStartHour, deliveryStartMinute, deliveryEndHour, deliveryEndMinute;
 
     CollectionReference cr = FirebaseFirestore.getInstance().collection("Orders");
 
@@ -73,295 +70,236 @@ public class NewParcelActivity extends AppCompatActivity implements OnMapReadyCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_parcel);
 
+        parcelScreenContent = findViewById(R.id.parcelScreenContent);
+        parcelScreenMapView = findViewById(R.id.parcelScreenMapView);
+        orderSuccessfulScreen = findViewById(R.id.orderSuccessfulScreen);
+        order_id = findViewById(R.id.order_id);
+        newParcel_length = findViewById(R.id.newParcel_length);
+        newParcel_breadth = findViewById(R.id.newParcel_breadth);
+        newParcel_height = findViewById(R.id.newParcel_height);
+        newParcel_weight = findViewById(R.id.newParcel_weight);
+        newParcel_Book = findViewById(R.id.newParcel_Book);
+        pickupStartTime = findViewById(R.id.pickupStartTime);
+        pickupEndTime = findViewById(R.id.pickupEndTime);
+        deliveryStartTime = findViewById(R.id.deliveryStartTime);
+        deliveryEndTime = findViewById(R.id.deliveryEndTime);
 
-        parcelScreenContent = (ScrollView) findViewById(R.id.parcelScreenContent);
-        parcelScreenMapView = (LinearLayout) findViewById(R.id.parcelScreenMapView);
-        orderSuccessfulScreen = (LinearLayout) findViewById(R.id.orderSuccessfulScreen);
-        order_id = (TextView) findViewById(R.id.order_id);
-        newParcel_length = (EditText) findViewById(R.id.newParcel_length);
-        newParcel_breadth = (EditText) findViewById(R.id.newParcel_breadth);
-        newParcel_height = (EditText) findViewById(R.id.newParcel_height);
-        newParcel_weight = (EditText) findViewById(R.id.newParcel_weight);
-        newParcel_Book = (Button) findViewById(R.id.newParcel_Book);
-        pickupStartTime = (Button) findViewById(R.id.pickupStartTime);
-        pickupEndTime = (Button) findViewById(R.id.pickupEndTime);
-        deliveryStartTime = (Button) findViewById(R.id.deliveryStartTime);
-        deliveryEndTime = (Button) findViewById(R.id.deliveryEndTime);
+        Animation buttonAnimation = AnimationUtils.loadAnimation(this, R.anim.button_anim);
 
-        Animation buttonAnimation = AnimationUtils.loadAnimation(this,R.anim.button_anim);
+        // Back Button
+        back_parcel_act = findViewById(R.id.back_parcel_act);
+        back_parcel_act.setOnClickListener(v -> finish());
 
-
-        //Back Button
-        back_parcel_act = (ImageView) findViewById(R.id.back_parcel_act);
-        back_parcel_act.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        //Location
+        // Location
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        getCurrentLocationBtn = (Button) findViewById(R.id.getCurrentLocationBtn);
+        getCurrentLocationBtn = findViewById(R.id.getCurrentLocationBtn);
 
-        //Initialising Google Maps Api
+        // Initializing Google Maps API
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(NewParcelActivity.this);
 
-
-        //Sender's current location fetching and marking
+        // Sender's current location fetching and marking
         getSenderLocation();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getSenderLocation();
-                getSenderLocation();
-            }
-        },1000);
-        
-        getCurrentLocationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonAnimation);
-                getCurrentLocationBtn.setText("Please Wait");
-                getSenderLocation();
-            }
+        new Handler().postDelayed(this::getSenderLocation, 1000);
+
+        getCurrentLocationBtn.setOnClickListener(v -> {
+            v.startAnimation(buttonAnimation);
+            getCurrentLocationBtn.setText("Please Wait");
+            getSenderLocation();
         });
 
-        pickupStartTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonAnimation);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(NewParcelActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        pickupStartHour = hourOfDay;
-                        pickupStartMinute = minute;
-                        pickupStartTime.setText(""+hourOfDay+" : "+minute);
-                    }
-                },15,00,true);
-                timePickerDialog.show();
-            }
+        pickupStartTime.setOnClickListener(v -> {
+            v.startAnimation(buttonAnimation);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewParcelActivity.this, (view, hourOfDay, minute) -> {
+                pickupStartHour = hourOfDay;
+                pickupStartMinute = minute;
+                pickupStartTime.setText(hourOfDay + " : " + minute);
+            }, 15, 0, true);
+            timePickerDialog.show();
         });
 
-        pickupEndTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonAnimation);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(NewParcelActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        pickupEndHour = hourOfDay;
-                        pickupEndMinute = minute;
-                        pickupEndTime.setText(""+hourOfDay+" : "+minute);
-                    }
-                },15,00,true);
-                timePickerDialog.show();
-            }
+        pickupEndTime.setOnClickListener(v -> {
+            v.startAnimation(buttonAnimation);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewParcelActivity.this, (view, hourOfDay, minute) -> {
+                pickupEndHour = hourOfDay;
+                pickupEndMinute = minute;
+                pickupEndTime.setText(hourOfDay + " : " + minute);
+            }, 15, 0, true);
+            timePickerDialog.show();
         });
 
-        deliveryStartTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonAnimation);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(NewParcelActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        deliveryStartHour = hourOfDay;
-                        deliveryStartMinute = minute;
-                        deliveryStartTime.setText(""+hourOfDay+" : "+minute);
-                    }
-                },15,00,true);
-                timePickerDialog.show();
-            }
+        deliveryStartTime.setOnClickListener(v -> {
+            v.startAnimation(buttonAnimation);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewParcelActivity.this, (view, hourOfDay, minute) -> {
+                deliveryStartHour = hourOfDay;
+                deliveryStartMinute = minute;
+                deliveryStartTime.setText(hourOfDay + " : " + minute);
+            }, 15, 0, true);
+            timePickerDialog.show();
         });
 
-        deliveryEndTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonAnimation);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(NewParcelActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        deliveryEndHour = hourOfDay;
-                        deliveryEndMinute = minute;
-                        deliveryEndTime.setText(""+hourOfDay+" : "+minute);
-                    }
-                },15,00,true);
-                timePickerDialog.show();
-            }
+        deliveryEndTime.setOnClickListener(v -> {
+            v.startAnimation(buttonAnimation);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(NewParcelActivity.this, (view, hourOfDay, minute) -> {
+                deliveryEndHour = hourOfDay;
+                deliveryEndMinute = minute;
+                deliveryEndTime.setText(hourOfDay + " : " + minute);
+            }, 15, 0, true);
+            timePickerDialog.show();
         });
 
-        //Shared Preferences
-        SharedPreferences sp = getSharedPreferences("login",MODE_PRIVATE);
+        // Shared Preferences
+        SharedPreferences sp = getSharedPreferences("login", MODE_PRIVATE);
+        String user_phn = sp.getString("phone", "no-phn");
+        String user_name = sp.getString("firstName", "no-fn") + " " + sp.getString("lastName", "no-fn");
 
-        String user_phn = sp.getString("phone","no-phn");
-        String user_name = sp.getString("firstName","no-fn") +" " +  sp.getString("lastName","no-fn");
+        newParcel_Book.setOnClickListener(v -> {
+            v.startAnimation(buttonAnimation);
 
-        newParcel_Book.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(buttonAnimation);
+            // Extract values from the input fields
+            String lengthStr = newParcel_length.getText().toString();
+            String breadthStr = newParcel_breadth.getText().toString();
+            String heightStr = newParcel_height.getText().toString();
+            String weightStr = newParcel_weight.getText().toString();
 
-                String lengthStr = newParcel_length.getText().toString();
-                String breadthStr = newParcel_breadth.getText().toString();
-                String heightStr = newParcel_height.getText().toString();
-                String weightStr = newParcel_weight.getText().toString();
-
-//                Check if all fields are filled
-//                if (lengthStr.isEmpty() || breadthStr.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty() ||
-//                        sender_lat == 0.00 || sender_lng == 0.00 || receiver_lat == 0.00 || receiver_lng == 0.00 ||
-//                        pickupStartHour == 0 || pickupStartMinute == 0 ||
-//                        pickupEndHour == 0 || pickupEndMinute == 0 ||
-//                        deliveryStartHour == 0 || deliveryStartMinute == 0 ||
-//                        deliveryEndHour == 0 || deliveryEndMinute == 0) {
-//                    Toast.makeText(NewParcelActivity.this, "Please fill all details!", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-
-                //Fetching Current Date
-                LocalDate localDate = LocalDate.now();
-
-
-                //Creating object containing all the details of parcels and user.
-                OrderDetails obj = new OrderDetails(
-                        Integer.parseInt(lengthStr),
-                        Integer.parseInt(breadthStr),
-                        Integer.parseInt(heightStr),
-                        Integer.parseInt(weightStr),
-                        sender_lat,
-                        sender_lng,
-                        receiver_lat,
-                        receiver_lng,
-                        pickupStartHour, pickupStartMinute,
-                        pickupEndHour, pickupEndMinute,
-                        deliveryStartHour, deliveryStartMinute,
-                        deliveryEndHour, deliveryEndMinute,localDate.toString(),user_phn,false,user_name);
-
-
-                //Adding object to firebase
-                cr.add(obj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        parcelScreenContent.setVisibility(View.GONE);
-                        parcelScreenMapView.setVisibility(View.GONE);
-                        orderSuccessfulScreen.setVisibility(View.VISIBLE);
-
-                        order_id.setText("#"+documentReference.getId());
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                finish();
-                            }
-                        }, 1400);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(NewParcelActivity.this, "Error Uploading Details !", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            // Validation Check: Check for empty fields and null values
+            if (lengthStr.isEmpty() || breadthStr.isEmpty() || heightStr.isEmpty() || weightStr.isEmpty()) {
+                Toast.makeText(NewParcelActivity.this, "Please fill in all parcel dimensions and weight!", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            // Validate that location coordinates are set
+            if (sender_lat == null || sender_lng == null) {
+                Toast.makeText(NewParcelActivity.this, "Please ensure the sender's location is set!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (receiver_lat == null || receiver_lng == null) {
+                Toast.makeText(NewParcelActivity.this, "Please select the receiver's location on the map!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Validate pickup and delivery times
+            if (pickupStartHour == 0 && pickupStartMinute == 0 || pickupEndHour == 0 && pickupEndMinute == 0) {
+                Toast.makeText(NewParcelActivity.this, "Please set valid pickup times!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (deliveryStartHour == 0 && deliveryStartMinute == 0 || deliveryEndHour == 0 && deliveryEndMinute == 0) {
+                Toast.makeText(NewParcelActivity.this, "Please set valid delivery times!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Ensure that pickup start time is earlier than pickup end time
+            if (pickupStartHour > pickupEndHour || (pickupStartHour == pickupEndHour && pickupStartMinute >= pickupEndMinute)) {
+                Toast.makeText(NewParcelActivity.this, "Pickup start time must be earlier than pickup end time!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Ensure that delivery start time is earlier than delivery end time
+            if (deliveryStartHour > deliveryEndHour || (deliveryStartHour == deliveryEndHour && deliveryStartMinute >= deliveryEndMinute)) {
+                Toast.makeText(NewParcelActivity.this, "Delivery start time must be earlier than delivery end time!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Ensure that the pickup end time is earlier than the delivery start time
+            if (pickupEndHour > deliveryStartHour || (pickupEndHour == deliveryStartHour && pickupEndMinute >= deliveryStartMinute)) {
+                Toast.makeText(NewParcelActivity.this, "Pickup end time must be earlier than delivery start time!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // All validations passed, proceed to create the OrderDetails object
+            LocalDate localDate = LocalDate.now();
+
+            // Creating object containing all the details of parcels and user
+            OrderDetails obj = new OrderDetails(
+                    Integer.parseInt(lengthStr),
+                    Integer.parseInt(breadthStr),
+                    Integer.parseInt(heightStr),
+                    Integer.parseInt(weightStr),
+                    sender_lat,
+                    sender_lng,
+                    receiver_lat,
+                    receiver_lng,
+                    pickupStartHour, pickupStartMinute,
+                    pickupEndHour, pickupEndMinute,
+                    deliveryStartHour, deliveryStartMinute,
+                    deliveryEndHour, deliveryEndMinute,
+                    localDate.toString(), user_phn, false, user_name
+            );
+
+            // Adding object to Firebase
+            cr.add(obj).addOnSuccessListener(documentReference -> {
+                parcelScreenContent.setVisibility(View.GONE);
+                parcelScreenMapView.setVisibility(View.GONE);
+                orderSuccessfulScreen.setVisibility(View.VISIBLE);
+
+                order_id.setText("#" + documentReference.getId());
+
+                new Handler().postDelayed(NewParcelActivity.this::finish, 1400);
+            }).addOnFailureListener(e ->
+                    Toast.makeText(NewParcelActivity.this, "Error Uploading Details!", Toast.LENGTH_SHORT).show()
+            );
         });
+
+
     }
 
-    //Initialising Google Map (myMap)
+    // Initializing Google Map (myMap)
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         myMap = googleMap;
 
-        //Default Sender location
-        LatLng sender = new LatLng(22.3210777,87.3079438);
+        // Default Sender location
+        LatLng sender = new LatLng(22.3210777, 87.3079438);
 
-        myMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(@NonNull LatLng latLng) {
-                //Clears all existing markers
-                myMap.clear();
+        myMap.setOnMapClickListener(latLng -> {
+            // Clears all existing markers
+            myMap.clear();
 
-                //Sender's location
-                LatLng sender = new LatLng(sender_lat,sender_lng);
-                myMap.addMarker(new MarkerOptions().position(sender).icon(setIcon(NewParcelActivity.this,R.drawable.sender_pin)).title("Sender"));
+            // Sender's location
+            LatLng senderLocation = new LatLng(sender_lat, sender_lng);
+            myMap.addMarker(new MarkerOptions().position(senderLocation).icon(setIcon(NewParcelActivity.this, R.drawable.sender_pin)).title("Sender"));
 
-                //Receiver's location
-                receiver_lat = latLng.latitude;
-                receiver_lng = latLng.longitude;
-                Toast.makeText(NewParcelActivity.this,Double.toString(receiver_lat)+","+Double.toString(receiver_lng), Toast.LENGTH_SHORT).show();
-                myMap.addMarker(new MarkerOptions().position(latLng).icon(setIcon(NewParcelActivity.this,R.drawable.receiver_pin)).title("Receiver"));
-                myMap.animateCamera(CameraUpdateFactory.zoomTo(12));
-            }
+            // Receiver's location
+            receiver_lat = latLng.latitude;
+            receiver_lng = latLng.longitude;
+            LatLng receiver = new LatLng(receiver_lat, receiver_lng);
+            myMap.addMarker(new MarkerOptions().position(receiver).icon(setIcon(NewParcelActivity.this, R.drawable.receiver_pin)).title("Receiver"));
+
+            myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(receiver, 10), 1000, null);
         });
 
+        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sender, 10), 1000, null);
     }
-    void getSenderLocation() {
 
-        //Checks if the location permissions are granted or not. If not granted, requests permissions.
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},0);
-            return;
-        }
-
-
-        //Location Fetched
-        Task<Location> task = fusedLocationProviderClient.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if(location!=null){
+    // Fetching sender's current location
+    private void getSenderLocation() {
+        if (ActivityCompat.checkSelfPermission(NewParcelActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(NewParcelActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(task -> {
+                Location location = task.getResult();
+                if (location != null) {
                     sender_lat = location.getLatitude();
                     sender_lng = location.getLongitude();
 
-                    //Marking Sender's location on map
-                    LatLng sender = new LatLng(sender_lat,sender_lng);
-                    myMap.addMarker(new MarkerOptions().position(sender).icon(setIcon(NewParcelActivity.this,R.drawable.sender_pin)).title("Sender"));
-                    myMap.moveCamera(CameraUpdateFactory.newLatLng(sender));
-                    myMap.animateCamera(CameraUpdateFactory.zoomTo(12));
-                }else{
-                    Toast.makeText(NewParcelActivity.this, "Error retrieving the location!", Toast.LENGTH_SHORT).show();
-                    getCurrentLocationBtn.setText("Locate Me");
+                    myMap.clear();
+                    LatLng sender = new LatLng(sender_lat, sender_lng);
+                    myMap.addMarker(new MarkerOptions().position(sender).icon(setIcon(NewParcelActivity.this, R.drawable.sender_pin)).title("Sender"));
+                    myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sender, 10), 1000, null);
                 }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(NewParcelActivity.this,"Error "+e,Toast.LENGTH_SHORT);
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                getCurrentLocationBtn.setText("Locate Me");
-            }
-        });
+            });
+        }
     }
 
-    //Creates and returns Map Icon (Marker Icon)
-    BitmapDescriptor setIcon(Context context, int drawable){
-        Drawable vectorDrawable = ContextCompat.getDrawable(
-                context, drawable);
-
-        // below line is use to set bounds to our vector
-        // drawable.
-        vectorDrawable.setBounds(
-                0, 0, vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight());
-
-        // below line is use to create a bitmap for our
-        // drawable which we have added.
-        Bitmap bitmap = Bitmap.createBitmap(
-                vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(),
-                Bitmap.Config.ARGB_8888);
-
-        // below line is use to add bitmap in our canvas.
+    // BitmapDescriptor for setting custom marker icons
+    private BitmapDescriptor setIcon(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-
-        // below line is use to draw our
-        // vector drawable in canvas.
-        vectorDrawable.draw(canvas);
-
-        // after generating our bitmap we are returning our
-        // bitmap.
+        drawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 }

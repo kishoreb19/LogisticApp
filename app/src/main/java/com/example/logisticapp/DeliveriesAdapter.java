@@ -23,6 +23,8 @@ import java.util.Map;
 
 public class DeliveriesAdapter extends RecyclerView.Adapter<DeliveriesAdapter.ViewHolder> {
     private ArrayList<String> data;
+    private ArrayList<Double> latitudes = new ArrayList<>();
+    private ArrayList<Double> longitudes = new ArrayList<>();
     private Context context;
 
     public DeliveriesAdapter(ArrayList<String> data, Context context) {
