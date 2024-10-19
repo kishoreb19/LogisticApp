@@ -21,6 +21,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,7 +39,7 @@ public class DriverActivity extends FragmentActivity implements OnMapReadyCallba
     ImageView logout_driver_act;
     ArrayList<Double> latitudes = new ArrayList<>();
     ArrayList<Double> longitudes = new ArrayList<>();
-    Button deliveriesBtn, showRoutes;
+    Button deliveriesBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class DriverActivity extends FragmentActivity implements OnMapReadyCallba
         driver_name = findViewById(R.id.driver_name);
         logout_driver_act = findViewById(R.id.logout_driver_act);
         deliveriesBtn = findViewById(R.id.deliveriesBtn);
-        showRoutes = findViewById(R.id.showRoutes);
+        //showRoutes = findViewById(R.id.showRoutes);
 
         // Logout Button
         logout_driver_act.setOnClickListener(v -> {
@@ -63,13 +64,14 @@ public class DriverActivity extends FragmentActivity implements OnMapReadyCallba
         deliveriesBtn.setOnClickListener(v -> startActivity(new Intent(DriverActivity.this, DeliveriesActivity.class)));
 
         // Shows paths between the pickups and deliveries locations
-        showRoutes.setOnClickListener(v -> drawPath());
+        //showRoutes.setOnClickListener(v -> drawPath());
 
         SharedPreferences sp = getSharedPreferences("login", MODE_PRIVATE);
         String name = sp.getString("firstName", "FirstName") + " " + sp.getString("lastName", "LastName");
         driver_name.setText("Driver : " + name);
 
         locations = new ArrayList<>();
+
 
         // Fetching locations(lat, lng) from Firebase that have not been yet delivered
         CollectionReference cr = FirebaseFirestore.getInstance().collection("Orders");

@@ -77,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
         // Login Button Function
         userLoginBtn.setOnClickListener(v -> {
             v.startAnimation(buttonAnimation);
-
             // Validation
             if (isValidInput()) {
                 // Fetching and checking credentials from Firebase Firestore Database
